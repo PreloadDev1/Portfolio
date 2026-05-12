@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Preload — Roblox Developer | Ethereal Particle Glow</title>
+<title>Preload — Roblox Developer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,26 +39,18 @@ body{
 	position:relative;
 }
 
-/* Canvas background layer - subtle, slow particle underlay */
-#bg-canvas {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	display: block;
-	z-index: 1;
-	pointer-events: none;
-	opacity: 0.7;
+#bg-canvas{
+	position:fixed;
+	top:0;left:0;
+	width:100%;height:100%;
+	display:block;
+	z-index:1;
+	pointer-events:none;
+	opacity:0.85;
 }
 
-/* Ensure all content sits above canvas */
-.wrap, .header, footer, section {
-	position: relative;
-	z-index: 10;
-}
+.wrap,.header,footer,section{position:relative;z-index:10}
 
-/* Soft gradient overlays */
 body::before{
 	content:'';
 	position:fixed;
@@ -67,7 +59,7 @@ body::before{
 		radial-gradient(circle at 20% 0%,rgba(212,165,116,0.04),transparent 50%),
 		radial-gradient(circle at 80% 100%,rgba(212,165,116,0.02),transparent 50%);
 	pointer-events:none;
-	z-index: 5;
+	z-index:5;
 }
 
 body::after{
@@ -77,7 +69,7 @@ body::after{
 	background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
 	opacity:0.025;
 	pointer-events:none;
-	z-index: 6;
+	z-index:6;
 	mix-blend-mode:overlay;
 }
 
@@ -92,6 +84,14 @@ a{color:inherit;text-decoration:none}
 	position:relative;
 	z-index:10;
 }
+
+/* =-== Reveal ==-= */
+.reveal{
+	opacity:0;
+	transform:translateY(24px);
+	transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1),transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.in-view{opacity:1;transform:translateY(0)}
 
 /* =-== Header ==-= */
 
@@ -119,6 +119,8 @@ a{color:inherit;text-decoration:none}
 .header-brand{color:var(--text)}
 .header-brand span{color:var(--text-dim);margin:0 0.5rem}
 
+.header-right{display:flex;align-items:center;gap:1.5rem}
+
 .header-status{
 	display:flex;
 	align-items:center;
@@ -133,6 +135,32 @@ a{color:inherit;text-decoration:none}
 	box-shadow:0 0 8px rgba(124,201,122,0.6);
 	animation:pulse 2.4s ease-in-out infinite;
 }
+
+.sound-toggle{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	width:28px;height:28px;
+	border:1px solid var(--border);
+	border-radius:50%;
+	color:var(--text-dim);
+	cursor:pointer;
+	transition:border-color 0.25s ease,color 0.25s ease,background 0.25s ease;
+	background:transparent;
+}
+
+.sound-toggle:hover{
+	border-color:var(--accent);
+	color:var(--accent);
+	background:rgba(212,165,116,0.04);
+}
+
+.sound-toggle svg{width:13px;height:13px}
+.sound-toggle .icon-off{display:block}
+.sound-toggle .icon-on{display:none}
+.sound-toggle.active .icon-off{display:none}
+.sound-toggle.active .icon-on{display:block}
+.sound-toggle.active{color:var(--accent);border-color:rgba(212,165,116,0.3)}
 
 @keyframes pulse{
 	0%,100%{opacity:1;transform:scale(1)}
@@ -149,19 +177,6 @@ a{color:inherit;text-decoration:none}
 	padding-top:100px;
 	padding-bottom:80px;
 	position:relative;
-}
-
-.hero-rail{
-	position:absolute;
-	left:2rem;
-	top:50%;
-	transform:translateY(-50%) rotate(-90deg);
-	transform-origin:left center;
-	font-family:var(--mono);
-	font-size:10px;
-	letter-spacing:0.3em;
-	color:var(--text-dim);
-	white-space:nowrap;
 }
 
 .hero-eyebrow{
@@ -221,35 +236,10 @@ h1.hero-title em{
 	text-transform:uppercase;
 }
 
-.hero-meta-item{
-	display:flex;
-	flex-direction:column;
-	gap:0.5rem;
-}
+.hero-meta-item{display:flex;flex-direction:column;gap:0.5rem}
 
 .hero-meta-label{color:var(--text-dim)}
 .hero-meta-value{color:var(--text);font-size:13px}
-
-.hero-scroll{
-	position:absolute;
-	bottom:2.5rem;
-	right:2rem;
-	font-family:var(--mono);
-	font-size:10px;
-	letter-spacing:0.25em;
-	color:var(--text-dim);
-	writing-mode:vertical-rl;
-	text-orientation:mixed;
-}
-
-.hero-scroll::after{
-	content:'';
-	display:block;
-	width:1px;
-	height:48px;
-	background:linear-gradient(to bottom,var(--text-dim),transparent);
-	margin:0.75rem auto 0;
-}
 
 /* =-== Sections ==-= */
 
@@ -259,11 +249,7 @@ section.section{
 	position:relative;
 }
 
-.section-grid{
-	display:grid;
-	grid-template-columns:200px 1fr;
-	gap:5rem;
-}
+.section-grid{display:grid;grid-template-columns:200px 1fr;gap:5rem}
 
 .section-label{
 	font-family:var(--mono);
@@ -289,16 +275,8 @@ section.section{
 	letter-spacing:-0.02em;
 }
 
-.section-label .tag{
-	display:block;
-	color:var(--text-dim);
-}
-
-.section-label .name{
-	color:var(--text);
-	margin-top:0.35rem;
-	display:block;
-}
+.section-label .tag{display:block;color:var(--text-dim)}
+.section-label .name{color:var(--text);margin-top:0.35rem;display:block}
 
 /* =-== About ==-= */
 
@@ -314,10 +292,7 @@ h2.about-headline{
 	color:var(--text);
 }
 
-h2.about-headline em{
-	font-style:italic;
-	color:var(--accent);
-}
+h2.about-headline em{font-style:italic;color:var(--accent)}
 
 .about-body p{
 	font-size:1rem;
@@ -338,10 +313,7 @@ h2.about-headline em{
 	border:1px solid var(--border);
 }
 
-.stat{
-	background:var(--bg);
-	padding:1.75rem 1.5rem;
-}
+.stat{background:var(--bg);padding:1.75rem 1.5rem}
 
 .stat-value{
 	font-family:var(--serif);
@@ -386,10 +358,7 @@ h2.about-headline em{
 	margin-bottom:1.5rem;
 }
 
-.stack-list{
-	display:flex;
-	flex-direction:column;
-}
+.stack-list{display:flex;flex-direction:column}
 
 .stack-row{
 	display:grid;
@@ -398,9 +367,17 @@ h2.about-headline em{
 	padding:0.95rem 0;
 	border-top:1px solid var(--border);
 	align-items:baseline;
+	transition:background 0.3s ease,padding-left 0.3s ease;
 }
 
 .stack-row:last-child{border-bottom:1px solid var(--border)}
+
+.stack-row:hover{
+	background:rgba(212,165,116,0.02);
+	padding-left:0.5rem;
+}
+
+.stack-row:hover .stack-name{color:var(--accent)}
 
 .stack-name{
 	font-family:var(--serif);
@@ -409,6 +386,7 @@ h2.about-headline em{
 	font-size:1.15rem;
 	color:var(--text);
 	letter-spacing:-0.01em;
+	transition:color 0.3s ease;
 }
 
 .stack-desc{
@@ -433,10 +411,7 @@ h2.about-headline em{
 
 .work-intro em{font-style:italic;color:var(--accent)}
 
-.work-list{
-	display:flex;
-	flex-direction:column;
-}
+.work-list{display:flex;flex-direction:column}
 
 .work-item{
 	padding:3rem 0;
@@ -483,11 +458,7 @@ h2.about-headline em{
 	margin-bottom:1.25rem;
 }
 
-.work-tags{
-	display:flex;
-	gap:0.5rem;
-	flex-wrap:wrap;
-}
+.work-tags{display:flex;gap:0.5rem;flex-wrap:wrap}
 
 .work-tag{
 	font-family:var(--mono);
@@ -525,9 +496,7 @@ h2.about-headline em{
 	overflow:hidden;
 }
 
-.work-item:hover .media{
-	border-color:rgba(212,165,116,0.4);
-}
+.work-item:hover .media{border-color:rgba(212,165,116,0.4)}
 
 .media::before{
 	content:'';
@@ -591,7 +560,7 @@ h2.about-headline em{
 	inset:0;
 }
 
-/* =-== Capabilities row ==-= */
+/* =-== Capabilities ==-= */
 
 .caps{
 	margin-top:4rem;
@@ -684,9 +653,8 @@ h2.about-headline em{
 	transform:translateX(4px);
 }
 
-.contact-card:hover .contact-icon{
-	color:var(--accent);
-}
+.contact-card:hover .contact-icon,
+.contact-card:hover .contact-value{color:var(--accent)}
 
 .contact-icon{
 	width:36px;
@@ -722,6 +690,7 @@ h2.about-headline em{
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
+	transition:color 0.3s ease;
 }
 
 .contact-arrow{
@@ -762,11 +731,9 @@ footer{
 
 .footer-inner a:hover{color:var(--accent)}
 
-/* Responsive */
+/* =-== Responsive ==-= */
 @media (max-width:880px){
 	.wrap{padding:0 1.25rem}
-	.hero-rail{display:none}
-	.hero-scroll{display:none}
 	.hero{padding-top:90px;min-height:auto;padding-bottom:5rem}
 	.section-grid{grid-template-columns:1fr;gap:2.5rem}
 	.section-label{position:static}
@@ -784,12 +751,18 @@ footer{
 	.footer-inner{flex-direction:column;gap:1rem;text-align:center}
 	.header-inner{font-size:10px}
 	.header-brand span{margin:0 0.3rem}
+	.header-right{gap:1rem}
 }
 
 @media (max-width:480px){
 	.header-brand .role{display:none}
 	.hero-meta{flex-direction:column;gap:1.5rem}
 	.stack-row{grid-template-columns:1fr;gap:0.25rem;padding:1rem 0}
+}
+
+@media (prefers-reduced-motion:reduce){
+	.reveal{opacity:1;transform:none;transition:none}
+	#bg-canvas{display:none}
 }
 </style>
 </head>
@@ -800,19 +773,25 @@ footer{
 <header class="header">
 	<div class="wrap header-inner">
 		<div class="header-brand">Preload<span>/</span><span class="role">Roblox Developer</span></div>
-		<div class="header-status">
-			<span class="status-dot"></span>
-			<span>Available for work</span>
+		<div class="header-right">
+			<div class="header-status">
+				<span class="status-dot"></span>
+				<span>Available for work</span>
+			</div>
+			<button class="sound-toggle" id="sound-toggle" aria-label="Toggle sound">
+				<svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+				<svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+			</button>
 		</div>
 	</div>
 </header>
 
 <section class="hero">
 	<div class="wrap">
-		<div class="hero-eyebrow">Roblox / Luau Developer</div>
-		<h1 class="hero-title">Building the <em>complex systems</em> most developers avoid.</h1>
-		<p class="hero-sub">Seven years writing production Luau. Physics, procedural animation, custom networking, secure server architecture, and the deep framework work that holds a serious game together.</p>
-		<div class="hero-meta">
+		<div class="hero-eyebrow reveal">Roblox / Luau Developer</div>
+		<h1 class="hero-title reveal">Building the <em>complex systems</em> most developers avoid.</h1>
+		<p class="hero-sub reveal">Seven years writing production Luau. Physics, procedural animation, custom networking, secure server architecture, and the deep framework work that holds a serious game together.</p>
+		<div class="hero-meta reveal">
 			<div class="hero-meta-item"><span class="hero-meta-label">Experience</span><span class="hero-meta-value">07 Years</span></div>
 			<div class="hero-meta-item"><span class="hero-meta-label">2024 Revenue</span><span class="hero-meta-value">$30,000</span></div>
 			<div class="hero-meta-item"><span class="hero-meta-label">Stack</span><span class="hero-meta-value">Luau · TruWorks</span></div>
@@ -825,18 +804,18 @@ footer{
 	<div class="wrap section-grid">
 		<div class="section-label"><span class="num">01</span><span class="tag">Section</span><span class="name">About</span></div>
 		<div>
-			<h2 class="about-headline">Clean architecture. Tight code. <em>Systems built to last</em>.</h2>
-			<div class="about-body">
+			<h2 class="about-headline reveal">Clean architecture. Tight code. <em>Systems built to last</em>.</h2>
+			<div class="about-body reveal">
 				<p>I've been writing Luau since 2018. The work I take on tends to sit at the harder end — physics simulations, IK rigs, server-authoritative combat, exploit-resistant data pipelines. The kind of system that has to be right the first time because rewriting it costs the project months.</p>
 				<p>I work inside a framework discipline (Managers / Controllers, packet-based networking, type annotations everywhere) and I keep code legible for the next person who reads it. <strong>Optimised, organised, and documented through structure rather than comment noise.</strong></p>
 				<p>In 2024 I generated <strong>$30,000</strong> from Roblox work — creating, investing, updating & selling game % to big companies.</p>
 			</div>
-			<div class="stats">
+			<div class="stats reveal">
 				<div class="stat"><div class="stat-value">07<sup>yrs</sup></div><div class="stat-label">Active Development</div></div>
 				<div class="stat"><div class="stat-value">$30k<sup>+</sup></div><div class="stat-label">Revenue · 2024</div></div>
 				<div class="stat"><div class="stat-value">100<sup>%</sup></div><div class="stat-label">Luau Native</div></div>
 			</div>
-			<div class="stack">
+			<div class="stack reveal">
 				<div class="stack-label">Stack</div>
 				<div class="stack-list">
 					<div class="stack-row"><div class="stack-name">Luau</div><div class="stack-desc">Strict typing throughout. PascalCase, full words, no comment noise — structure over annotation.</div></div>
@@ -854,17 +833,17 @@ footer{
 	<div class="wrap section-grid">
 		<div class="section-label"><span class="num">02</span><span class="tag">Section</span><span class="name">Work</span></div>
 		<div>
-			<h2 class="work-intro">A selection of systems built across <em>commissioned</em> and personal projects.</h2>
+			<h2 class="work-intro reveal">A selection of systems built across <em>commissioned</em> and personal projects.</h2>
 			<div class="work-list">
-				<div class="work-item"><div class="work-header"><div class="work-index">001</div><div><h3 class="work-title">Procedural Spider Entity</h3><p class="work-desc">A fully procedural spider built from scratch. FABRIK-style inverse kinematics for natural leg placement, physics-driven knockback, tilt-spring system reacting to terrain, and CollectionService tag-based raycast filtering for clean environment detection.</p><div class="work-tags"><span class="work-tag primary">IK</span><span class="work-tag">Physics</span><span class="work-tag">FABRIK</span><span class="work-tag">CollectionService</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Spider Entity · Demo<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">002</div><div><h3 class="work-title">Physics-Based Carry System</h3><p class="work-desc">Server-authoritative pickup and carry using AlignPosition and AlignOrientation constraints, custom IK control for the carry pose, and network ownership transfers handled through the Packet layer.</p><div class="work-tags"><span class="work-tag primary">Constraints</span><span class="work-tag">Server Auth</span><span class="work-tag">Network Ownership</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Carry System · Demo<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">003</div><div><h3 class="work-title">Framework Architecture</h3><p class="work-desc">Production-grade framework discipline built on TruWorks — strict Managers / Controllers separation, Packet networking with typed responses, Pulse signal layer, and a Luau type system.</p><div class="work-tags"><span class="work-tag primary">TruWorks</span><span class="work-tag">Packet</span><span class="work-tag">Pulse</span><span class="work-tag">Typed Luau</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Framework · Overview<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">004</div><div><h3 class="work-title">Data Management Pipeline</h3><p class="work-desc">Profile lifecycle, session locks, global updates, encrypted storage with TruEncode, admin overrides for cross-profile loading, and a ProcessReceipt pipeline.</p><div class="work-tags"><span class="work-tag primary">DataStore</span><span class="work-tag">Profile</span><span class="work-tag">Session Lock</span><span class="work-tag">Encrypted</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">DataManager · Demo<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">005</div><div><h3 class="work-title">Complex Game Loops</h3><p class="work-desc">End-to-end game loops covering progression, economy tiers, persistence, and unlock gates. Built around data-driven content so adding new systems doesn't mean rewriting loop code.</p><div class="work-tags"><span class="work-tag primary">Progression</span><span class="work-tag">Economy</span><span class="work-tag">Data-Driven</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Game Loop · Demo<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">006</div><div><h3 class="work-title">Hitbox &amp; Magnitude Systems</h3><p class="work-desc">Server-validated hit detection with optimised debug visualisation. Magnitude-based and spatial-query hitboxes, directional knockback, and validation patterns.</p><div class="work-tags"><span class="work-tag primary">Hitbox</span><span class="work-tag">Magnitude</span><span class="work-tag">Server Validation</span><span class="work-tag">Anti-Exploit</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Hitbox System · Demo<small>16:9 · Drop video or image here</small></div></div></div>
-				<div class="work-item"><div class="work-header"><div class="work-index">007</div><div><h3 class="work-title">Modular Minigame Systems</h3><p class="work-desc">Drop-in minigame architecture — each module conforms to a shared lifecycle (Start, Update, Cleanup) and registers itself with the rotation.</p><div class="work-tags"><span class="work-tag primary">Modular</span><span class="work-tag">Lifecycle</span><span class="work-tag">Round Systems</span></div></div></div><div class="media"><video src="Media/Minigame.mp4" autoplay muted loop playsinline></video></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">001</div><div><h3 class="work-title">Procedural Spider Entity</h3><p class="work-desc">A fully procedural spider built from scratch. FABRIK-style inverse kinematics for natural leg placement, physics-driven knockback, tilt-spring system reacting to terrain, and CollectionService tag-based raycast filtering for clean environment detection.</p><div class="work-tags"><span class="work-tag primary">IK</span><span class="work-tag">Physics</span><span class="work-tag">FABRIK</span><span class="work-tag">CollectionService</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Spider Entity · Demo<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">002</div><div><h3 class="work-title">Physics-Based Carry System</h3><p class="work-desc">Server-authoritative pickup and carry using AlignPosition and AlignOrientation constraints, custom IK control for the carry pose, and network ownership transfers handled through the Packet layer.</p><div class="work-tags"><span class="work-tag primary">Constraints</span><span class="work-tag">Server Auth</span><span class="work-tag">Network Ownership</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Carry System · Demo<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">003</div><div><h3 class="work-title">Framework Architecture</h3><p class="work-desc">Production-grade framework discipline built on TruWorks — strict Managers / Controllers separation, Packet networking with typed responses, Pulse signal layer, and a Luau type system.</p><div class="work-tags"><span class="work-tag primary">TruWorks</span><span class="work-tag">Packet</span><span class="work-tag">Pulse</span><span class="work-tag">Typed Luau</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Framework · Overview<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">004</div><div><h3 class="work-title">Data Management Pipeline</h3><p class="work-desc">Profile lifecycle, session locks, global updates, encrypted storage with TruEncode, admin overrides for cross-profile loading, and a ProcessReceipt pipeline.</p><div class="work-tags"><span class="work-tag primary">DataStore</span><span class="work-tag">Profile</span><span class="work-tag">Session Lock</span><span class="work-tag">Encrypted</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">DataManager · Demo<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">005</div><div><h3 class="work-title">Complex Game Loops</h3><p class="work-desc">End-to-end game loops covering progression, economy tiers, persistence, and unlock gates. Built around data-driven content so adding new systems doesn't mean rewriting loop code.</p><div class="work-tags"><span class="work-tag primary">Progression</span><span class="work-tag">Economy</span><span class="work-tag">Data-Driven</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Game Loop · Demo<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">006</div><div><h3 class="work-title">Hitbox &amp; Magnitude Systems</h3><p class="work-desc">Server-validated hit detection with optimised debug visualisation. Magnitude-based and spatial-query hitboxes, directional knockback, and validation patterns.</p><div class="work-tags"><span class="work-tag primary">Hitbox</span><span class="work-tag">Magnitude</span><span class="work-tag">Server Validation</span><span class="work-tag">Anti-Exploit</span></div></div></div><div class="media"><div class="media-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></div><div class="media-label">Hitbox System · Demo<small>16:9 · Drop video or image here</small></div></div></div>
+				<div class="work-item reveal"><div class="work-header"><div class="work-index">007</div><div><h3 class="work-title">Modular Minigame Systems</h3><p class="work-desc">Drop-in minigame architecture — each module conforms to a shared lifecycle (Start, Update, Cleanup) and registers itself with the rotation.</p><div class="work-tags"><span class="work-tag primary">Modular</span><span class="work-tag">Lifecycle</span><span class="work-tag">Round Systems</span></div></div></div><div class="media"><video src="Media/Minigame.mp4" autoplay muted loop playsinline></video></div></div>
 			</div>
-			<div class="caps"><div class="caps-label">Also Comfortable With</div><div class="caps-grid"><div class="cap">Secure server architecture and exploit-resistant validation patterns</div><div class="cap">Complex UI work — state management, polished animations, ProgressBars, Beams</div><div class="cap">Spring physics, Bezier paths, custom motion primitives</div><div class="cap">CFrame mathematics, network ownership, framerate-independent motion</div><div class="cap">Metatables, coroutines, signal patterns, Trove / Promise / Option</div><div class="cap">Custom packet layers and typed server-client communication</div></div></div>
+			<div class="caps reveal"><div class="caps-label">Also Comfortable With</div><div class="caps-grid"><div class="cap">Secure server architecture and exploit-resistant validation patterns</div><div class="cap">Complex UI work — state management, polished animations, ProgressBars, Beams</div><div class="cap">Spring physics, Bezier paths, custom motion primitives</div><div class="cap">CFrame mathematics, network ownership, framerate-independent motion</div><div class="cap">Metatables, coroutines, signal patterns, Trove / Promise / Option</div><div class="cap">Custom packet layers and typed server-client communication</div></div></div>
 		</div>
 	</div>
 </section>
@@ -873,13 +852,13 @@ footer{
 	<div class="wrap section-grid">
 		<div class="section-label"><span class="num">03</span><span class="tag">Section</span><span class="name">Contact</span></div>
 		<div>
-			<h2 class="contact-headline">Have a system that needs <em>building right</em>?</h2>
-			<p class="contact-body">I take commissions and retainer work. Single-system contracts, multi-month framework builds, or ongoing support — all on the table. Best to reach me on Discord with a short project brief.</p>
-			<div class="contact-grid">
+			<h2 class="contact-headline reveal">Have a system that needs <em>building right</em>?</h2>
+			<p class="contact-body reveal">I take commissions and retainer work. Single-system contracts, multi-month framework builds, or ongoing support — all on the table. Best to reach me on Discord with a short project brief.</p>
+			<div class="contact-grid reveal">
 				<a class="contact-card" href="#"><div class="contact-icon"><svg viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg></div><div class="contact-info"><div class="contact-label">Discord</div><div class="contact-value">preload</div></div><div class="contact-arrow">→</div></a>
-				<a class="contact-card" href="https://www.roblox.com/users/353521038/profile" target="_blank"><div class="contact-icon"><svg viewBox="0 0 100 100" fill="currentColor"><path d="M19.7 0L0 76.4 76.4 96.1 96.1 19.7 19.7 0zm34.5 55.4l-21.3-5.5 5.5-21.3 21.3 5.5-5.5 21.3z"/></svg></div><div class="contact-info"><div class="contact-label">Roblox</div><div class="contact-value">Preload</div></div><div class="contact-arrow">→</div></a>
+				<a class="contact-card" href="https://www.roblox.com/users/353521038/profile" target="_blank"><div class="contact-icon"><svg viewBox="0 0 96.1 96.1" fill="currentColor"><path d="M19.7 0L0 76.4 76.4 96.1 96.1 19.7 19.7 0zm34.5 55.4l-21.3-5.5 5.5-21.3 21.3 5.5-5.5 21.3z"/></svg></div><div class="contact-info"><div class="contact-label">Roblox</div><div class="contact-value">Preload</div></div><div class="contact-arrow">→</div></a>
 			</div>
-			<p class="contact-fine">Response time: usually within 24 hours after 4pm GMT.</p>
+			<p class="contact-fine reveal">Response time: usually within 24 hours after 4pm GMT.</p>
 		</div>
 	</div>
 </section>
@@ -887,158 +866,261 @@ footer{
 <footer><div class="wrap footer-inner"><div>© 2026 Preload · Roblox Developer</div><div>v1.0 · Built in Luau spirit</div></div></footer>
 
 <script>
+/* =-== Canvas particles + small mouse glow ==-= */
 (function() {
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    
-    // --- Ultra slow, subtle particle settings ---
-    const PARTICLE_COUNT = 48;
-    const MAX_DIST = 190;
-    const MOUSE_INFLUENCE = 210;
-    const MOUSE_FORCE = 0.12;        // slower reaction
-    
-    let mouseX = width * 0.5;
-    let mouseY = height * 0.5;
-    
-    let particles = [];
-    
-    class Particle {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.vx = (Math.random() - 0.5) * 0.12;
-            this.vy = (Math.random() - 0.5) * 0.12;
-            this.radius = 1.6;
-        }
-        
-        update() {
-            // very slow random drift
-            this.vx += (Math.random() - 0.5) * 0.025;
-            this.vy += (Math.random() - 0.5) * 0.025;
-            this.vx *= 0.98;
-            this.vy *= 0.98;
-            
-            // mouse interaction: gentle deflect (slower)
-            const dx = this.x - mouseX;
-            const dy = this.y - mouseY;
-            const dist = Math.hypot(dx, dy);
-            if (dist < MOUSE_INFLUENCE && dist > 1) {
-                const force = (1 - dist / MOUSE_INFLUENCE) * MOUSE_FORCE;
-                const angle = Math.atan2(dy, dx);
-                this.vx += Math.cos(angle) * force;
-                this.vy += Math.sin(angle) * force;
-            }
-            
-            this.x += this.vx;
-            this.y += this.vy;
-            
-            // soft boundaries
-            if (this.x < 8) { this.x = 8; this.vx *= -0.3; }
-            if (this.x > width - 8) { this.x = width - 8; this.vx *= -0.3; }
-            if (this.y < 8) { this.y = 8; this.vy *= -0.3; }
-            if (this.y > height - 8) { this.y = height - 8; this.vy *= -0.3; }
-        }
-        
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(212, 165, 116, 0.3)`;
-            ctx.fill();
-            ctx.shadowBlur = 2;
-            ctx.shadowColor = 'rgba(212,165,116,0.2)';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius * 0.5, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(245, 200, 140, 0.4)`;
-            ctx.fill();
-        }
-    }
-    
-    function initParticles() {
-        particles = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-            particles.push(new Particle(Math.random() * width, Math.random() * height));
-        }
-    }
-    
-    function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-        if (particles.length) {
-            for (let p of particles) {
-                p.x = Math.min(width - 10, Math.max(10, p.x));
-                p.y = Math.min(height - 10, Math.max(10, p.y));
-            }
-        } else {
-            initParticles();
-        }
-    }
-    
-    function drawLines() {
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const p1 = particles[i], p2 = particles[j];
-                const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                if (dist < MAX_DIST) {
-                    let alpha = 0.09 * (1 - dist / MAX_DIST);
-                    alpha = Math.min(0.16, Math.max(0.02, alpha));
-                    ctx.beginPath();
-                    ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.strokeStyle = `rgba(212, 165, 116, ${alpha})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-    
-    // Realistic soft glow using radial gradient (not stacked circles)
-    function drawMouseGlow() {
-        if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-            const gradient = ctx.createRadialGradient(mouseX, mouseY, 2, mouseX, mouseY, 68);
-            gradient.addColorStop(0, 'rgba(212, 165, 116, 0.14)');
-            gradient.addColorStop(0.3, 'rgba(212, 165, 116, 0.07)');
-            gradient.addColorStop(0.6, 'rgba(212, 165, 116, 0.02)');
-            gradient.addColorStop(1, 'rgba(212, 165, 116, 0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // second subtle layer for smoothness
-            const gradient2 = ctx.createRadialGradient(mouseX, mouseY, 4, mouseX, mouseY, 110);
-            gradient2.addColorStop(0, 'rgba(212, 165, 116, 0.06)');
-            gradient2.addColorStop(0.5, 'rgba(212, 165, 116, 0.02)');
-            gradient2.addColorStop(1, 'rgba(212, 165, 116, 0)');
-            ctx.fillStyle = gradient2;
-            ctx.fillRect(0, 0, width, height);
-        }
-    }
-    
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        for (let p of particles) p.update();
-        drawLines();
-        for (let p of particles) p.draw();
-        drawMouseGlow();   // smooth fading glow
-        requestAnimationFrame(animate);
-    }
-    
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-    window.addEventListener('mouseleave', () => { mouseX = -500; mouseY = -500; });
-    window.addEventListener('touchmove', (e) => { if(e.touches.length) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } });
-    window.addEventListener('touchstart', (e) => { if(e.touches.length) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } });
-    
-    resizeCanvas();
-    initParticles();
-    animate();
+	const canvas = document.getElementById('bg-canvas');
+	const ctx = canvas.getContext('2d');
+	let width = window.innerWidth;
+	let height = window.innerHeight;
+
+	const PARTICLE_COUNT = 60;
+	const MAX_DIST = 180;
+	const MOUSE_INFLUENCE = 130;
+	const MOUSE_FORCE = 0.10;
+	const GLOW_RADIUS = 110;
+
+	let mouseX = -500, mouseY = -500;
+	let renderX = -500, renderY = -500;
+	let particles = [];
+
+	class Particle {
+		constructor(x, y) {
+			this.x = x;
+			this.y = y;
+			this.vx = (Math.random() - 0.5) * 0.5;
+			this.vy = (Math.random() - 0.5) * 0.5;
+			this.radius = 1.3 + Math.random() * 0.8;
+			this.baseAlpha = 0.22 + Math.random() * 0.18;
+		}
+		update() {
+			this.vx += (Math.random() - 0.5) * 0.012;
+			this.vy += (Math.random() - 0.5) * 0.012;
+
+			this.vx *= 0.998;
+			this.vy *= 0.998;
+
+			const maxVel = 0.55;
+			if (this.vx > maxVel) this.vx = maxVel;
+			if (this.vx < -maxVel) this.vx = -maxVel;
+			if (this.vy > maxVel) this.vy = maxVel;
+			if (this.vy < -maxVel) this.vy = -maxVel;
+
+			const minVel = 0.08;
+			const speed = Math.hypot(this.vx, this.vy);
+			if (speed < minVel) {
+				const angle = Math.atan2(this.vy || 0.01, this.vx || 0.01);
+				this.vx = Math.cos(angle) * minVel;
+				this.vy = Math.sin(angle) * minVel;
+			}
+
+			const dx = this.x - renderX;
+			const dy = this.y - renderY;
+			const dist = Math.hypot(dx, dy);
+			if (dist < MOUSE_INFLUENCE && dist > 1) {
+				const force = (1 - dist / MOUSE_INFLUENCE) * MOUSE_FORCE;
+				const angle = Math.atan2(dy, dx);
+				this.vx += Math.cos(angle) * force;
+				this.vy += Math.sin(angle) * force;
+			}
+
+			this.x += this.vx;
+			this.y += this.vy;
+
+			if (this.x < -10) this.x = width + 10;
+			if (this.x > width + 10) this.x = -10;
+			if (this.y < -10) this.y = height + 10;
+			if (this.y > height + 10) this.y = -10;
+		}
+		draw() {
+			const dx = this.x - renderX;
+			const dy = this.y - renderY;
+			const dist = Math.hypot(dx, dy);
+			const glowBoost = dist < GLOW_RADIUS ? (1 - dist / GLOW_RADIUS) * 0.5 : 0;
+			const alpha = this.baseAlpha + glowBoost;
+
+			ctx.beginPath();
+			ctx.arc(this.x, this.y, this.radius + glowBoost * 0.8, 0, Math.PI * 2);
+			ctx.fillStyle = `rgba(212, 165, 116, ${alpha})`;
+			ctx.shadowBlur = 4 + glowBoost * 6;
+			ctx.shadowColor = 'rgba(212,165,116,0.35)';
+			ctx.fill();
+			ctx.shadowBlur = 0;
+
+			ctx.beginPath();
+			ctx.arc(this.x, this.y, this.radius * 0.45, 0, Math.PI * 2);
+			ctx.fillStyle = `rgba(245, 210, 160, ${0.5 + glowBoost * 0.3})`;
+			ctx.fill();
+		}
+	}
+
+	function initParticles() {
+		particles = [];
+		for (let i = 0; i < PARTICLE_COUNT; i++) {
+			particles.push(new Particle(Math.random() * width, Math.random() * height));
+		}
+	}
+
+	function resizeCanvas() {
+		width = window.innerWidth;
+		height = window.innerHeight;
+		canvas.width = width;
+		canvas.height = height;
+		if (!particles.length) initParticles();
+	}
+
+	function drawLines() {
+		for (let i = 0; i < particles.length; i++) {
+			for (let j = i + 1; j < particles.length; j++) {
+				const p1 = particles[i], p2 = particles[j];
+				const dx = p1.x - p2.x;
+				const dy = p1.y - p2.y;
+				const dist = Math.hypot(dx, dy);
+				if (dist < MAX_DIST && Math.abs(dx) < MAX_DIST && Math.abs(dy) < MAX_DIST) {
+					let alpha = 0.10 * (1 - dist / MAX_DIST);
+					alpha = Math.min(0.2, Math.max(0.02, alpha));
+					ctx.beginPath();
+					ctx.moveTo(p1.x, p1.y);
+					ctx.lineTo(p2.x, p2.y);
+					ctx.strokeStyle = `rgba(212, 165, 116, ${alpha})`;
+					ctx.lineWidth = 0.7;
+					ctx.stroke();
+				}
+			}
+		}
+	}
+
+	function drawMouseGlow() {
+		if (renderX < -100 || renderY < -100) return;
+
+		const outer = ctx.createRadialGradient(renderX, renderY, 1, renderX, renderY, GLOW_RADIUS);
+		outer.addColorStop(0, 'rgba(212, 165, 116, 0.14)');
+		outer.addColorStop(0.3, 'rgba(212, 165, 116, 0.06)');
+		outer.addColorStop(0.7, 'rgba(212, 165, 116, 0.015)');
+		outer.addColorStop(1, 'rgba(212, 165, 116, 0)');
+		ctx.fillStyle = outer;
+		ctx.fillRect(0, 0, width, height);
+
+		const core = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, 22);
+		core.addColorStop(0, 'rgba(245, 210, 160, 0.16)');
+		core.addColorStop(0.6, 'rgba(212, 165, 116, 0.04)');
+		core.addColorStop(1, 'rgba(212, 165, 116, 0)');
+		ctx.fillStyle = core;
+		ctx.fillRect(0, 0, width, height);
+	}
+
+	function animate() {
+		ctx.clearRect(0, 0, width, height);
+
+		renderX += (mouseX - renderX) * 0.14;
+		renderY += (mouseY - renderY) * 0.14;
+
+		for (let p of particles) p.update();
+		drawLines();
+		for (let p of particles) p.draw();
+		drawMouseGlow();
+		requestAnimationFrame(animate);
+	}
+
+	window.addEventListener('resize', resizeCanvas);
+	window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+	window.addEventListener('mouseleave', () => { mouseX = -500; mouseY = -500; });
+	window.addEventListener('touchmove', (e) => { if(e.touches.length) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } });
+
+	resizeCanvas();
+	initParticles();
+	animate();
+})();
+
+/* =-== Scroll reveals ==-= */
+(function() {
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('in-view');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+	document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+/* =-== Subtle sound system ==-= */
+(function() {
+	const toggle = document.getElementById('sound-toggle');
+	let audioCtx = null;
+	let enabled = false;
+
+	function getAudioContext() {
+		if (!audioCtx) {
+			const AC = window.AudioContext || window.webkitAudioContext;
+			if (!AC) return null;
+			audioCtx = new AC();
+		}
+		if (audioCtx.state === 'suspended') audioCtx.resume();
+		return audioCtx;
+	}
+
+	function playTone(freq, duration, volume = 0.08) {
+		if (!enabled) return;
+		const ctx = getAudioContext();
+		if (!ctx) return;
+
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		const filter = ctx.createBiquadFilter();
+
+		osc.type = 'sine';
+		osc.frequency.setValueAtTime(freq, ctx.currentTime);
+		osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + duration);
+
+		filter.type = 'lowpass';
+		filter.frequency.value = 2400;
+		filter.Q.value = 1;
+
+		gain.gain.setValueAtTime(0, ctx.currentTime);
+		gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.004);
+		gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+		osc.connect(filter);
+		filter.connect(gain);
+		gain.connect(ctx.destination);
+
+		osc.start();
+		osc.stop(ctx.currentTime + duration + 0.02);
+	}
+
+	toggle.addEventListener('click', () => {
+		enabled = !enabled;
+		toggle.classList.toggle('active', enabled);
+		if (enabled) {
+			getAudioContext();
+			playTone(660, 0.12, 0.06);
+		}
+	});
+
+	document.querySelectorAll('.contact-card').forEach(card => {
+		card.addEventListener('mouseenter', () => playTone(880, 0.06, 0.03));
+		card.addEventListener('click', () => playTone(440, 0.18, 0.09));
+	});
+
+	document.querySelectorAll('.work-item').forEach(item => {
+		item.addEventListener('mouseenter', () => playTone(720, 0.05, 0.022));
+	});
+
+	document.querySelectorAll('.stack-row').forEach(row => {
+		row.addEventListener('mouseenter', () => playTone(980, 0.04, 0.018));
+	});
+
+	document.querySelectorAll('.stat').forEach(stat => {
+		stat.addEventListener('mouseenter', () => playTone(820, 0.05, 0.020));
+	});
+
+	document.querySelectorAll('.cap').forEach(cap => {
+		cap.addEventListener('mouseenter', () => playTone(1050, 0.03, 0.015));
+	});
 })();
 </script>
+
 </body>
 </html>
